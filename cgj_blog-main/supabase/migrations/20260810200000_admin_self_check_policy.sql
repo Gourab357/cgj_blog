@@ -1,0 +1,2 @@
+-- Superseded. Administrator checks now occur only in the application server,
+-- against the database-backed Google subject allowlist.

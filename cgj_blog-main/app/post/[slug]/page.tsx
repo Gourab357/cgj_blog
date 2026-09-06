@@ -1,0 +1,17 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { ArrowLeft, ArrowRight, Instagram, Share2 } from 'lucide-react';
+import { getPublicPost } from '@/lib/content';
+
+export const dynamic = 'force-dynamic';
+type Params = { params: { slug: string } };
+async function getPost(slug: string) {
+  return getPublicPost(slug);
+}
+export async function generateMetadata({ params }: Params): Promise<Metadata> { const post = await getPost(params.slug); return { title: post?.title ?? 'Journal article', description: post?.excerpt ?? 'A CGJ journal article.', keywords: post?.tags.map((tag) => tag.name) }; }
+export default async function PostPage({ params }: Params) {
+  const post = await getPost(params.slug);
+  if (!post) return <main className="grid min-h-screen place-items-center bg-[#f8f6f0] p-5 text-center"><div><h1 className="font-display text-4xl text-[#10223c]">Article not found</h1><p className="mt-3 text-[#61707b]">This article may be a draft or the database migration has not been applied.</p><Link href="/" className="mt-6 inline-block font-bold text-[#18727a]">Return to CGJ</Link></div></main>;
+  const date = new Date(post.published_at ?? post.updated_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' });
+  return <main className="min-h-screen bg-[#f8f6f0]"><div className="mx-auto max-w-5xl px-5 py-10 lg:px-8"><Link href="/#journal" className="inline-flex items-center gap-2 text-sm font-bold text-[#61707b] hover:text-[#ef765d]"><ArrowLeft size={16}/> Back to CGJ</Link><div className="mx-auto mt-16 max-w-3xl"><p className="eyebrow text-[#ef765d]">{post.category?.name ?? 'CGJ Journal'} · {date}</p><h1 className="mt-5 font-display text-5xl leading-[1.08] text-[#10223c] md:text-7xl">{post.title}</h1>{post.excerpt && <p className="mt-6 text-lg leading-8 text-[#61707b]">{post.excerpt}</p>}{post.tags.length > 0 && <div className="mt-6 flex flex-wrap gap-2">{post.tags.map((tag) => <Link key={tag.id} href={`/?tag=${tag.slug}#journal`} className="rounded-full bg-[#e4f4f3] px-3 py-1 text-xs font-bold text-[#18727a]">{tag.name}</Link>)}</div>}</div>{post.cover_image_url && <img src={post.cover_image_url} alt={post.cover_image_alt || post.title} className="mx-auto mt-12 aspect-[1.8] w-full max-w-5xl object-cover"/>}<div className="mx-auto grid max-w-5xl gap-14 py-14 md:grid-cols-[1fr_2fr]"><aside className="border-t border-[#dfe4e5] pt-5"><p className="eyebrow text-[#18727a]">About this piece</p><p className="mt-3 text-sm text-[#61707b]">Published {date}</p><div className="mt-8 flex gap-3"><button className="grid h-10 w-10 place-items-center rounded-full border border-[#cbd5d7]" aria-label="Share"><Share2 size={16}/></button><a className="grid h-10 w-10 place-items-center rounded-full border border-[#cbd5d7]" href="https://www.instagram.com/cgj_nusrl/" aria-label="Instagram"><Instagram size={16}/></a></div></aside><article className="editorial-prose">{post.content.split('\n').filter(Boolean).map((paragraph, index) => <p key={index}>{paragraph}</p>)}</article></div><div className="mx-auto flex max-w-3xl items-center justify-between border-t border-[#dfe4e5] pt-7"><Link href="/#journal" className="text-sm font-bold text-[#61707b] hover:text-[#ef765d]">More from the journal</Link><Link href="/admin" className="inline-flex items-center gap-2 text-sm font-bold text-[#10223c] hover:text-[#ef765d]">Editorial login <ArrowRight size={16}/></Link></div></div></main>;
+}

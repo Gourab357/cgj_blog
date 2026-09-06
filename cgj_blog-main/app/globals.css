@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { --ink: #132238; --navy: #0d1b31; --cream: #f8f6f0; --paper: #fffdf8; --coral: #ef765d; --aqua: #6bc8d1; --line: #dfe4e5; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--cream); color: var(--ink); font-family: var(--font-sans), sans-serif; }
+a { color: inherit; text-decoration: none; }
+button, input, textarea, select { font: inherit; }
+::selection { background: var(--aqua); color: var(--navy); }
+@layer utilities {
+  .font-display { font-family: var(--font-display), Georgia, serif; }
+  .paper-grid { background-image: linear-gradient(rgba(13,27,49,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(13,27,49,.035) 1px, transparent 1px); background-size: 28px 28px; }
+  .eyebrow { letter-spacing: .18em; text-transform: uppercase; font-size: .69rem; font-weight: 700; }
+  .focus-ring:focus-visible { outline: 3px solid var(--aqua); outline-offset: 4px; }
+}
+@keyframes drift { from { transform: translateY(0) rotate(-2deg); } to { transform: translateY(-9px) rotate(2deg); } }
+.drift { animation: drift 5s ease-in-out infinite alternate; }
+.editorial-prose h2 { font-family: var(--font-display), Georgia, serif; font-size: 2rem; margin: 2.5rem 0 1rem; line-height: 1.2; }
+.editorial-prose p { font-size: 1.08rem; line-height: 1.85; color: #3c4b5b; margin: 1.25rem 0; }
+.editorial-prose blockquote { border-left: 4px solid var(--coral); padding: .75rem 1.25rem; margin: 2rem 0; font-family: var(--font-display), Georgia, serif; font-size: 1.5rem; line-height: 1.45; color: var(--navy); }
