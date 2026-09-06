@@ -1,1 +1,1 @@
-export const LOGO_SRC = '/CGJ_logo.jpg';
+export const LOGO_SRC = '/cgj_logo.jpg';
